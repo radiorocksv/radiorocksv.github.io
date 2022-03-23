@@ -12,13 +12,17 @@
     <meta name="template-title" content="Radio Rock SV - FM Radio Station Bootstrap HTML Template">
     <meta name="keywords" content="edu, fm, bootstrap, html, template, mp3, player, radio station, responsive, schedule, shoutcast, online radio station template, radio station html template, radio station website template, mp3 player">
     <title>Radio Rock SV|El Salvador C.A.</title>
-    <link rel="icon" href="img/player-bg.png">
+    <link rel="stylesheet" href="font/flaticon/flaticon.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
     <link rel="stylesheet" href="css\vendor\slick.css">
-    <link rel="stylesheet" href="css\vendor\venobox.min.css">
     <link rel="stylesheet" href="css\vendor\bootstrap.min.css">
     <link rel="stylesheet" href="css\custom\main.css">
+    <link rel="stylesheet" href="css\custom\about.css">
+    <link rel="icon" href="img\Logo.png">
+    <link rel="stylesheet" href="css\vendor\venobox.min.css">
+    <link rel="stylesheet" href="css\custom\main.css">
     <link rel="stylesheet" href="css\custom\index.css">
+    <link rel="stylesheet" href="css\custom\about.css">
 </head>
 
 <body>
@@ -45,10 +49,21 @@
                                 <a href="#"><img src="img\logo.png" alt="logo"></a><button class="cencel"><i class="fas fa-times"></i></button></div>
                             <ul class="navbar-list">
                                 <li class="navbar-item active"><a class="navbar-link" href="index.html"><span><i class="fas fa-headphones-alt"></i>Inicio</span></a></li>
-                                <li class="navbar-item"><a class="navbar-link" href="#Nosotros"><span><i class="fas fa-headphones-alt"></i>Nosotros</span></a></li>
+                                <li class="navbar-item navbar-dropdown"><a class="navbar-link" href="#"><span><i class="fas fa-headphones-alt"></i>Bandas Salvadoreñas</span><small class="fas fa-chevron-down"></small></a>
+                                    <ul class="dropdown-list">
+                                        <li>
+                                            <a class="dropdown-link" href="FatalInfecction/indexFatalInfecction.html">Fatal Infecction</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-link" href="#">Eutopia</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
                                 <li class="navbar-player">
                                     <div class="player"><button class="player-btn" id="play-pause-button"><i class="fas fa-play"></i></button></div>
                                 </li>
+
                                 <li class="navbar-item navbar-dropdown"><a class="navbar-link" href="#"><span><i class="fas fa-headphones-alt"></i>Redes</span><small class="fas fa-chevron-down"></small></a>
                                     <ul class="dropdown-list">
                                         <li><a class="dropdown-link" href="https://www.tiktok.com/@radiorocksv">Tik Tok</a></li>
@@ -109,6 +124,45 @@
             </div>
         </section>
     </main>
+
+    <div class="bottom-player">
+        <div class="player"><button class="player-btn" id="play-pause-button2"><i class="fas fa-play"></i></button>
+        </div>
+    </div>
+
+    <section class="counter-part">
+        <div class="counter-oly">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-lg-3">
+                        <div class="counter-div">
+                            <h3><span class="counter-number">39</span>k+</h3>
+                            <p>Visitantes en Línea</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3">
+                        <div class="counter-div">
+                            <h3><span class="counter-number">13</span>k+</h3>
+                            <p>Me Gusta en nuestras Redes</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3">
+                        <div class="counter-div">
+                            <h3><span class="counter-number">10</span>k+</h3>
+                            <p>Oyentes son nuestra Inspiración</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3">
+                        <div class="counter-div">
+                            <h3><span class="counter-number">1</span>k+</h3>
+                            <p>Oyentes en nuestros EnVivos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="section blog-part">
         <div class="container">
             <div class="row">
@@ -333,15 +387,17 @@
                 </li>
             </ul>
         </div>
+
     </section>
     <script src="js\vendor\jquery-1.12.4.min.js"></script>
     <script src="js\vendor\popper.min.js"></script>
     <script src="js\vendor\bootstrap.min.js"></script>
+    <script src="js\custom\player.js"></script>
     <script src="js\vendor\slick.min.js"></script>
     <script src="js\custom\slick.js"></script>
-    <script src="js\vendor\venobox.min.js"></script>
-    <script src="js\custom\venobox.js"></script>
-    <script src="js\custom\player.js"></script>
+    <script src="js\vendor\counterup.min.js"></script>
+    <script src="js\vendor\waypoints.min.js"></script>
+    <script src="js\custom\counterup.js"></script>
     <script src="js\custom\main.js"></script>
 </body>
 
