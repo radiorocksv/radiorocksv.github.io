@@ -10,25 +10,25 @@
 //paste it inside the array as more as you want music then you don't need to do any other thing
 
 let allMusic = [{
-        name: "Tierra de Miserias - musica 01",
+        name: "Tierra de Miserias - Balas de Cañon",
         artist: "Fatal Infecction",
         img: "music-1",
         src: "music-1"
     },
     {
-        name: "Tierra de Miserias - musica 02",
+        name: "Tierra de Miserias - Súpervivientes",
         artist: "Fatal Infecction",
         img: "music-2",
         src: "music-2"
     },
     {
-        name: "Tierra de Miserias - musica 03",
+        name: "Tierra de Miserias - Sangre en el asfalto",
         artist: "Fatal Infecction",
         img: "music-3",
         src: "music-3"
     },
     {
-        name: "Tierra de Miserias - musica 04",
+        name: "Tierra de Miserias - Infección Fatal",
         artist: "Fatal Infecction",
         img: "music-4",
         src: "music-4"
