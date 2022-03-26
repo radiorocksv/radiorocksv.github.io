@@ -10,7 +10,7 @@
   margin: 0;
 }
 :root{
-  --pink: #00f7ff;
+  --pink: #ffffff;
   --violet: #0084ff;
   --lightblack: #515C6F;
   --white: #ffffff;
@@ -18,7 +18,7 @@
   --pinkshadow: #ffcbdd;
   --lightbshadow: rgba(0,0,0,0.15);
   --front: rgb(255, 255, 255);
-  --back: rgba(0, 110, 255, 0.425);
+  --back: rgb(255, 255, 255);
 }
 body{
   display: flex;
