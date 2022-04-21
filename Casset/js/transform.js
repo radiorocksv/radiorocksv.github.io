@@ -1,20 +1,5 @@
 /*
- * transform: A jQuery cssHooks adding cross-browser 2d transform capabilities to $.fn.css() and $.fn.animate()
- *
- * limitations:
- * - requires jQuery 1.4.3+
- * - Should you use the *translate* property, then your elements need to be absolutely positionned in a relatively positionned wrapper **or it will fail in IE678**.
- * - transformOrigin is not accessible
- *
- * latest version and complete README available on Github:
- * https://github.com/louisremi/jquery.transform.js
- *
- * Copyright 2011 @louis_remi
- * Licensed under the MIT license.
- *
- * This saved you an hour of work?
- * Send me music http://www.amazon.co.uk/wishlist/HNTU0468LQON
- *
+ 
  */
 (function( $ ) {
 
@@ -82,8 +67,7 @@ if ( supportProperty && supportProperty != propertyName ) {
 			}
 		}
 	/* Fix two jQuery bugs still present in 1.5.1
-	 * - rupper is incompatible with IE9, see http://jqbug.com/8346
-	 * - jQuery.css is not really jQuery.cssProps aware, see http://jqbug.com/8402
+	 
 	 */
 	} else if ( /^1\.[0-5](?:\.|$)/.test($.fn.jquery) ) {
 		propertyHook = {
@@ -95,15 +79,7 @@ if ( supportProperty && supportProperty != propertyName ) {
 			}
 		}
 	}
-	/* TODO: leverage hardware acceleration of 3d transform in Webkit only
-	else if ( supportProperty == 'Webkit' + suffix && support3dTransform ) {
-		propertyHook = {
-			set: function( elem, value ) {
-				elem.style[supportProperty] = 
-					value.replace();
-			}
-		}
-	}*/
+	/**/
 	
 } else if ( supportMatrixFilter ) {
 	propertyHook = {
@@ -247,10 +223,7 @@ $.fx.step.transform = function( fx ) {
 	}
 
 	/*
-	 * We want a fast interpolation algorithm.
-	 * This implies avoiding function calls and sacrifying DRY principle:
-	 * - avoid $.each(function(){})
-	 * - round values using bitewise hacks, see http://jsperf.com/math-round-vs-hack/3
+	 
 	 */
 	if ( start.translate ) {
 		// round translate to the closest pixel
