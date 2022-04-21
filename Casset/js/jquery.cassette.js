@@ -47,7 +47,7 @@
 	
 	$.Cassette.defaults 	= {
 		// song names. Assumes the path of each song is songs/name.filetype
-		songs			: [ 'music-7', 'music-8', 'music-9', 'music-10', 'music-11', 'music-12', 'music-13', 'music-14', 'music-15', 'music-16', 'music-17', 'music-18', 'music-19', 'music-20', 'music-21', 'music-22' ],
+		songs			: [ 'music-7', 'music-8', 'music-9', 'music-10', 'music-11', 'music-12', 'music-13', 'music-14', 'music-15', 'music-16', 'music-17', 'music-18', 'music-19', 'music-20', 'music-21' ],
 		fallbackMessage	: 'HTML5 audio not supported',
 		// initial sound volume
 		initialVolume	: 0.7
