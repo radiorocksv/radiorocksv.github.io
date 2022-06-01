@@ -33,5 +33,4 @@ let allMusic = [{
         img: "music-4",
         src: "music-4"
     },
-
 ];
