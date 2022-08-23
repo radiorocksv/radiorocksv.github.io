@@ -19,7 +19,7 @@ $((function() {
         _ = ["Dawn", "Me & You", "Electro Boy", "Home", "Proxy (Original Mix)"],
         S = ["Skylike - Dawn", "Alex Skrindo - Me & You", "Kaaze - Electro Boy", "Jordan Schor - Home", "Martin Garrix - Proxy"],
         B = ["_1", "_2", "_3", "_4", "_5"],
-        E = ["http://stream.zeno.fm/2f15s8vukm0uv"],
+        E = ["http://stream.zeno.fm/ramm1r1f4f8uv"],
         H = $("#play-previous"),
         O = $("#play-next"),
         P = -1;
@@ -57,7 +57,7 @@ $((function() {
         _ = ["Dawn", "Me & You", "Electro Boy", "Home", "Proxy (Original Mix)"],
         S = ["Skylike - Dawn", "Alex Skrindo - Me & You", "Kaaze - Electro Boy", "Jordan Schor - Home", "Martin Garrix - Proxy"],
         B = ["_1", "_2", "_3", "_4", "_5"],
-        E = ["http://stream.zeno.fm/2f15s8vukm0uv"],
+        E = ["http://stream.zeno.fm/ramm1r1f4f8uv"],
         H = $("#play-previous"),
         O = $("#play-next"),
         P = -1;
