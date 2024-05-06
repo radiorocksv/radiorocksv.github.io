@@ -9,106 +9,84 @@
 
 //paste it inside the array as more as you want music then you don't need to do any other thing
 
-let allMusic = [{
-        name: "Misery",
-        artist: "Burning Flag",
-        img: "music-1",
-        src: "music-1"
-    },
-    {
-        name: "Amorphus Hell",
-        artist: "Hellnomorf",
-        img: "music-2",
-        src: "music-2"
-    },
-    {
-        name: "Not to Return",
-        artist: "Invertebral",
-        img: "music-3",
-        src: "music-3"
-    },
-    {
-        name: "Una Nueva Historia",
-        artist: "Rebelion",
-        img: "music-4",
-        src: "music-4"
-    },
-    {
-        name: "Pasa La Peste",
-        artist: "K Libre",
-        img: "music-5",
-        src: "music-5"
-    },
-    {
-        name: "Cabra Cabrão",
-        artist: "Damage Device",
-        img: "music-6",
-        src: "music-6"
-    },
-    {
-        name: "La Ley del Diablo",
-        artist: "Horrific",
-        img: "music-7",
-        src: "music-7"
-    },
-    {
-        name: "Cataclismo",
-        artist: "Historias Nórdicas de la Abuela Vikinga",
-        img: "music-8",
-        src: "music-8"
-    },
-{
-        name: "Inner Child",
-        artist: "Liliumdust",
-        img: "music-9",
-        src: "music-9"
-    },
-{
-        name: "Long Life The King",
-        artist: "Other Brain",
-        img: "music-10",
-        src: "music-10"
-    },
-{
-        name: "Rise Of The Tyrant Empire",
-        artist: "Scarlett",
-        img: "music-11",
-        src: "music-11"
-    },
-{
-        name: "Chronicles Of Life And Death",
-        artist: "Spell of Niriti",
-        img: "music-12",
-        src: "music-12"
-    },
-{
-        name: "Paraiso de la Oferta",
-        artist: "Notoken",
-        img: "music-13",
-        src: "music-13"
-    },
-{
-        name: "Autoestima Cero",
-        artist: "Feeling Worthless",
-        img: "music-14",
-        src: "music-14"
-    },
-{
-        name: "Fade Away",
-        artist: "Soulburner",
-        img: "music-15",
-        src: "music-15"
-    },
-{
-        name: "Propios y Extraños",
-        artist: "Proaresis",
-        img: "music-16",
-        src: "music-16"
-    },
-{
-        name: "The Curse and the Beast",
-        artist: "Inluminus",
-        img: "music-17",
-        src: "music-17"
-    },
-];
+let allMusic = [
+  {
+    name: "The Story is Over",
+    artist: "Silverheart",
+    img: "music-1",
+    src: "music-1"
+  },
+  {
+    name: "Cancerbero",
+    artist: "Demoncore",
+    img: "music-2",
+    src: "music-2"
+  },
+  {
+    name: "Revenge",
+    artist: "Endernity",
+    img: "music-3",
+    src: "music-3"
+  },
+  {
+    name: "Lo Que En El Templo Se Hace Escuchar",
+    artist: "Doña Calavera",
+    img: "music-4",
+    src: "music-4"
+  },
+  {
+    name: "Violador Inadvertido",
+    artist: "Necrofonia",
+    img: "music-5",
+    src: "music-5"
+  },
+  {
+    name: "Elimination Is My Name",
+    artist: "Steel Wolves",
+    img: "music-6",
+    src: "music-6"
+  },
+  {
+    name: "La Tres Leches",
+    artist: "Culionator",
+    img: "music-7",
+    src: "music-7"
+  },
+  {
+    name: "Falls The Tower",
+    artist: "Species",
+    img: "music-8",
+    src: "music-8"
+  },
+  {
+    name: "Satan On My Mind",
+    artist: "Olathia",
+    img: "music-9",
+    src: "music-9"
+  },
+  {
+    name: "Ring Of Fire",
+    artist: "Distorted Reflection",
+    img: "music-10",
+    src: "music-10"
+  },
+  {
+    name: "Slaves Of Society",
+    artist: "The Damnnation",
+    img: "music-11",
+    src: "music-11"
+  },
+  {
+    name: "Marioneta",
+    artist: "Vesanya",
+    img: "music-12",
+    src: "music-12"
+  },
+  {
+    name: "Hard Line",
+    artist: "Deadlock Crew",
+    img: "music-13",
+    src: "music-13"
+  },
+ 
+ ];
