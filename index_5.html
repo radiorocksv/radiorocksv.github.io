@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RockSV OnAir</title>
+    <style>
+        :root {
+            --bg: #000000;
+            --rojo: #FF0000;
+            --naranja: #FF5F1F;
+            --morado: #BC13FE;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial Black', sans-serif;
+            overflow: hidden;
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        /* Info de Canción */
+        #trackInfo {
+            text-align: center;
+            margin-bottom: 20px;
+            height: 60px;
+            text-transform: uppercase;
+        }
+        #artistName { font-size: 0.8rem; letter-spacing: 2px; transition: color 0.3s; }
+        #songTitle { font-size: 1.1rem; display: block; margin-top: 5px; }
+
+        /* Logo Wrapper */
+        #logoWrapper {
+            cursor: pointer;
+            z-index: 10;
+            will-change: transform, filter;
+            transition: transform 0.05s ease;
+        }
+
+        #mainLogo {
+            width: 75vw;
+            max-width: 300px;
+            height: auto;
+            /* Iluminación base muy reducida */
+            filter: drop-shadow(0 0 5px rgba(188, 19, 254, 0.3));
+            will-change: filter;
+        }
+
+        /* Controles */
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin: 30px 0;
+            z-index: 10;
+        }
+
+        .play-btn {
+            background: transparent;
+            border: 2px solid white;
+            color: #fff;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .vol-btn {
+            background: transparent;
+            border: none;
+            color: #444;
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+        .vol-btn:hover { color: white; }
+
+        /* Visualizador */
+        .viz-container {
+            width: 100%;
+            height: 100px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="trackInfo">
+            <span id="artistName">CONECTANDO</span>
+            <strong id="songTitle">ROCK SV</strong>
+        </div>
+
+        <div id="logoWrapper">
+            <img src="img/rrsv.png" id="mainLogo" alt="Rock SV">
+        </div>
+
+        <div class="controls">
+            <button id="volDown" class="vol-btn">−</button>
+            <button id="playBtn" class="play-btn">▶</button>
+            <button id="volUp" class="vol-btn">+</button>
+        </div>
+
+        <div class="viz-container">
+            <canvas id="visualizer"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const STREAM_URL = 'https://stream.zeno.fm/2f15s8vukm0uv';
+        const META_URL = 'https://api.zeno.fm/mounts/metadata/subscribe/2f15s8vukm0uv';
+        
+        const audio = new Audio(STREAM_URL);
+        audio.crossOrigin = "anonymous";
+
+        const playBtn = document.getElementById('playBtn');
+        const mainLogo = document.getElementById('mainLogo');
+        const logoWrapper = document.getElementById('logoWrapper');
+        const artistText = document.getElementById('artistName');
+        const canvas = document.getElementById('visualizer');
+        const ctx = canvas.getContext('2d');
+
+        let audioContext, analyser, source;
+        let isPlaying = false;
+
+        // Metadatos
+        function connectMetadata() {
+            const eventSource = new EventSource(META_URL);
+            eventSource.onmessage = (e) => {
+                const data = JSON.parse(e.data);
+                if (data.streamTitle) {
+                    const parts = data.streamTitle.split(" - ");
+                    artistText.innerText = parts[0] || "ROCK SV";
+                    document.getElementById('songTitle').innerText = parts[1] || "EN VIVO";
+                }
+            };
+        }
+        connectMetadata();
+
+        // Volumen
+        document.getElementById('volUp').onclick = () => { if(audio.volume < 0.9) audio.volume += 0.1; };
+        document.getElementById('volDown').onclick = () => { if(audio.volume > 0.1) audio.volume -= 0.1; };
+
+        const togglePlay = () => {
+            if (!audioContext) initAudio();
+            if (isPlaying) {
+                audio.pause();
+                playBtn.innerText = '▶';
+            } else {
+                audio.play();
+                playBtn.innerText = '⏸';
+            }
+            isPlaying = !isPlaying;
+        };
+
+        playBtn.onclick = togglePlay;
+        logoWrapper.onclick = togglePlay;
+
+        function initAudio() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            source = audioContext.createMediaElementSource(audio);
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
+
+            analyser.fftSize = 64;
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            function render() {
+                requestAnimationFrame(render);
+                analyser.getByteFrequencyData(dataArray);
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                let sum = 0;
+                for (let i = 0; i < bufferLength; i++) sum += dataArray[i];
+                let avg = sum / bufferLength;
+
+                // DETERMINAR COLOR SEGÚN INTENSIDAD
+                let currentColor = '#BC13FE'; // Morado
+                
+                if (isPlaying && avg >= 5 && avg < 45) {
+                    currentColor = '#FF5F1F'; // Naranja
+                } else if (isPlaying && avg >= 45) {
+                    currentColor = '#FF0000'; // Rojo
+                }
+
+                // EFECTO DE DESTELLOS (Iluminación reducida y reactiva)
+                // El brillo solo se intensifica en los picos de volumen
+                let flashIntensity = isPlaying ? (avg / 10) : 5;
+                mainLogo.style.filter = `drop-shadow(0 0 ${flashIntensity}px ${currentColor})`;
+                artistText.style.color = currentColor;
+
+                // EFECTO TEMBLOR Y "SHAKE" VISUAL EN PICOS ALTOS
+                if (avg > 45) {
+                    let s = avg / 30;
+                    logoWrapper.style.transform = `translate(${(Math.random()-0.5)*s}px, ${(Math.random()-0.5)*s}px)`;
+                } else {
+                    logoWrapper.style.transform = 'translate(0,0)';
+                }
+
+                // DIBUJAR BARRAS (Color dinámico)
+                const barWidth = (canvas.width / bufferLength) * 1.5;
+                let x = 0;
+                for (let i = 0; i < bufferLength; i++) {
+                    let barHeight = dataArray[i] / 2.5;
+                    ctx.shadowBlur = 5; // Resplandor de barras reducido
+                    ctx.shadowColor = currentColor;
+                    ctx.fillStyle = currentColor;
+                    ctx.fillRect(x, canvas.height - barHeight, barWidth - 4, barHeight);
+                    x += barWidth;
+                }
+            }
+            render();
+        }
+    </script>
+</body>
+</html>
