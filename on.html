@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RockSV OnLINE</title>
+    <link rel="icon" type="image/png" href="img/rrsv.png">
+    <style>
+        :root {
+            --배경색: #000000;
+            --빨강: #FF0000;
+            --주황: #FF5F1F;
+            --보라: #BC13FE;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--배경색);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            overflow: hidden;
+            color: white;
+        }
+
+        .컨테이너 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        /* 곡 정보 섹션 */
+        #곡정보 {
+            text-align: center;
+            margin-bottom: 20px;
+            height: 60px;
+            text-transform: uppercase;
+        }
+        #아티스트명 { font-size: 0.8rem; letter-spacing: 2px; transition: color 0.3s; }
+        #노래제목 { font-size: 1.1rem; display: block; margin-top: 5px; }
+
+        /* 로고 스타일 */
+        #로고래퍼 {
+            cursor: pointer;
+            z-index: 10;
+            will-change: transform, filter;
+            transition: transform 0.05s ease;
+        }
+
+        #메인로고 {
+            width: 75vw;
+            max-width: 300px;
+            height: auto;
+            filter: drop-shadow(0 0 5px rgba(188, 19, 254, 0.3));
+            will-change: filter;
+        }
+
+        /* 컨트롤러 스타일 */
+        .컨트롤러 {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin: 30px 0;
+            z-index: 10;
+        }
+
+        .재생버튼 {
+            background: transparent;
+            border: 2px solid white;
+            color: #fff;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .볼륨버튼 {
+            background: transparent;
+            border: none;
+            color: #444;
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+        .볼륨버튼:hover { color: white; }
+
+        /* 비주얼라이저 컨테이너 */
+        .비주얼컨테이너 {
+            width: 100%;
+            height: 100px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="컨테이너">
+        <div id="곡정보">
+            <span id="아티스트명">Conectando...</span>
+            <strong id="노래제목">ROCK SV</strong>
+        </div>
+
+        <div id="로고래퍼">
+            <img src="img/rrsv.png" id="메인로고" alt="락 SV 로고">
+        </div>
+
+        <div class="컨트롤러">
+            <button id="볼륨낮춤" class="볼륨버튼">−</button>
+            <button id="재생버튼" class="재생버튼">▶</button>
+            <button id="볼륨높임" class="볼륨버튼">+</button>
+        </div>
+
+        <div class="비주얼컨테이너">
+            <canvas id="비주얼라이저"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // 상수 설정
+        const 스트림URL = 'https://stream.zeno.fm/2f15s8vukm0uv';
+        const 메타데이터URL = 'https://api.zeno.fm/mounts/metadata/subscribe/2f15s8vukm0uv';
+        
+        const 오디오 = new Audio(스트림URL);
+        오디오.crossOrigin = "anonymous";
+
+        // DOM 요소 가져오기
+        const 재생버튼요소 = document.getElementById('재생버튼');
+        const 메인로고요소 = document.getElementById('메인로고');
+        const 로고래퍼요소 = document.getElementById('로고래퍼');
+        const 아티스트텍스트 = document.getElementById('아티스트명');
+        const 노래제목텍스트 = document.getElementById('노래제목');
+        const 캔버스 = document.getElementById('비주얼라이저');
+        const 컨텍스트 = 캔버스.getContext('2d');
+
+        let 오디오컨텍스트, 분석기, 소스;
+        let 재생중 = false;
+
+        // 메타데이터 연결 함수
+        function 메타데이터연결() {
+            const 이벤트소스 = new EventSource(메타데이터URL);
+            이벤트소스.onmessage = (e) => {
+                const 데이터 = JSON.parse(e.data);
+                if (데이터.streamTitle) {
+                    const 파트 = 데이터.streamTitle.split(" - ");
+                    아티스트텍스트.innerText = 파트[0] || "락 SV";
+                    노래제목텍스트.innerText = 파트[1] || "라이브 방송";
+                }
+            };
+        }
+        메타데이터연결();
+
+        // 볼륨 조절 로직
+        document.getElementById('볼륨높임').onclick = () => { if(오디오.volume < 0.9) 오디오.volume += 0.1; };
+        document.getElementById('볼륨낮춤').onclick = () => { if(오디오.volume > 0.1) 오디오.volume -= 0.1; };
+
+        // 재생 토글 함수
+        const 재생토글 = () => {
+            if (!오디오컨텍스트) 오디오초기화();
+            if (재생중) {
+                오디오.pause();
+                재생버튼요소.innerText = '▶';
+            } else {
+                오디오.play();
+                재생버튼요소.innerText = '⏸';
+            }
+            재생중 = !재생중;
+        };
+
+        재생버튼요소.onclick = 재생토글;
+        로고래퍼요소.onclick = 재생토글;
+
+        // 오디오 초기화 및 시각화 로직
+        function 오디오초기화() {
+            오디오컨텍스트 = new (window.AudioContext || window.webkitAudioContext)();
+            분석기 = 오디오컨텍스트.createAnalyser();
+            소스 = 오디오컨텍스트.createMediaElementSource(오디오);
+            소스.connect(분석기);
+            분석기.connect(오디오컨텍스트.destination);
+
+            분석기.fftSize = 64;
+            const 버퍼길이 = 분석기.frequencyBinCount;
+            const 데이터배열 = new Uint8Array(버퍼길이);
+
+            캔버스.width = 캔버스.offsetWidth;
+            캔버스.height = 캔버스.offsetHeight;
+
+            function 렌더링() {
+                requestAnimationFrame(렌더링);
+                분석기.getByteFrequencyData(데이터배열);
+
+                컨텍스트.clearRect(0, 0, 캔버스.width, 캔버스.height);
+
+                let 합계 = 0;
+                for (let i = 0; i < 버퍼길이; i++) 합계 += 데이터배열[i];
+                let 평균 = 합계 / 버퍼길이;
+
+                // 볼륨 강도에 따른 색상 변경
+                let 현재색상 = '#BC13FE'; // 기본 보라색
+                
+                if (재생중 && 평균 >= 5 && 평균 < 45) {
+                    현재색상 = '#FF5F1F'; // 주황색
+                } else if (재생중 && 평균 >= 45) {
+                    현재색상 = '#FF0000'; // 빨간색
+                }
+
+                // 로고 발광 효과
+                let 발광강도 = 재생중 ? (평균 / 10) : 5;
+                메인로고요소.style.filter = `drop-shadow(0 0 ${발광강도}px ${현재색상})`;
+                아티스트텍스트.style.color = 현재색상;
+
+                // 비트 반응형 로고 흔들림 효과
+                if (평균 > 45) {
+                    let 강도 = 평균 / 30;
+                    로고래퍼요소.style.transform = `translate(${(Math.random()-0.5)*강도}px, ${(Math.random()-0.5)*강도}px)`;
+                } else {
+                    로고래퍼요소.style.transform = 'translate(0,0)';
+                }
+
+                // 시각화 바 그리기
+                const 바너비 = (캔버스.width / 버퍼길이) * 1.5;
+                let x축 = 0;
+                for (let i = 0; i < 버퍼길이; i++) {
+                    let 바높이 = 데이터배열[i] / 2.5;
+                    컨텍스트.shadowBlur = 5;
+                    컨텍스트.shadowColor = 현재색상;
+                    컨텍스트.fillStyle = 현재색상;
+                    컨텍스트.fillRect(x축, 캔버스.height - 바높이, 바너비 - 4, 바높이);
+                    x축 += 바너비;
+                }
+            }
+            렌더링();
+        }
+    </script>
+</body>
+</html>
